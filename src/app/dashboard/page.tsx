@@ -20,7 +20,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground mt-2">
-            Authorization System Development Overview
+            System Development Overview
           </p>
         </div>
         <Button>
@@ -39,9 +39,9 @@ export default function DashboardPage() {
             <BarChart3 className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5</div>
+            <div className="text-2xl font-bold">7</div>
             <div className="text-muted-foreground text-xs">
-              2 in progress, 2 pending, 1 completed
+              3 in progress, 3 pending, 1 completed
             </div>
           </CardContent>
         </Card>
@@ -49,16 +49,16 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Most recently released feature
+              Most Recent Development
             </CardTitle>
             <Clock className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              Authorization Timestamp Fix
+              Energy Community Calculation
             </div>
             <div className="text-muted-foreground text-xs">
-              Ref: CSUSE0042963
+              Ref: CSUSE0068632
             </div>
           </CardContent>
         </Card>
@@ -66,14 +66,14 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Development Requests
+              Priority Distribution
             </CardTitle>
             <GitPullRequestDraft className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">7</div>
+            <div className="text-2xl font-bold">P2</div>
             <div className="text-muted-foreground text-xs">
-              3 marked as milestones
+              4 P2, 2 P1, 1 P3 tasks
             </div>
           </CardContent>
         </Card>
@@ -96,19 +96,19 @@ export default function DashboardPage() {
             <div className="space-y-4">
               {[
                 {
-                  title: 'Authorization Service Integration',
-                  status: 'In Progress',
-                  date: 'Priority 3 • Ref: CSUSE0007907',
-                },
-                {
-                  title: 'Authorization Link System',
-                  status: 'Pending',
-                  date: 'Priority 2 • Ref: CSUSE0038787',
-                },
-                {
-                  title: 'Authorization Timestamp Fix',
+                  title: 'Energy Community Calculation',
                   status: 'Completed',
-                  date: 'Priority 3 • Ref: CSUSE0042963',
+                  date: 'Priority 1 • Ref: CSUSE0068632',
+                },
+                {
+                  title: 'Time Series Data Control',
+                  status: 'Pending',
+                  date: 'Priority 1 • Ref: CSUSE0071213',
+                },
+                {
+                  title: 'Authorization Restoration Process',
+                  status: 'In Progress',
+                  date: 'Priority 2',
                 },
               ].map((item, index) => (
                 <div
@@ -152,7 +152,7 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                   <Button variant="outline" className="w-full justify-start">
                     <Bell className="mr-2 h-4 w-4" />
-                    Authorization Updates
+                    Development Updates
                   </Button>
                   <Button variant="outline" className="w-full justify-start">
                     <Clock className="mr-2 h-4 w-4" />

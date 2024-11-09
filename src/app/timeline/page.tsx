@@ -46,36 +46,58 @@ const timelineData: TimelineItem[] = [
     priority: '2',
   },
   {
-    id: 184,
-    title: 'Simplified Authorization Management',
+    id: 377,
+    title: 'Third Party Authorization in Customer Portal',
     status: 'in-progress',
-    date: 'Nov 30, 2022',
+    date: 'Jan 24, 2024',
     description:
-      'Improve process for ending authorizations through both interface and GUI',
-    milestone: false,
-    priority: '2',
-  },
-  {
-    id: 216,
-    title: 'Authorization Link System',
-    status: 'pending',
-    date: 'Jan 11, 2023',
-    description:
-      'Direct link implementation for household authorizations with pre-filled information',
+      'Streamline the authorization process for third-party applications through customer portal',
     milestone: true,
-    reference: 'CSUSE0038787',
+    reference: 'CSUSE0069362',
     priority: '2',
   },
   {
-    id: 253,
-    title: 'Authorization Timestamp Fix',
-    status: 'completed',
-    date: 'Mar 1, 2023',
+    id: 381,
+    title: 'Bulk Authorization Management',
+    status: 'pending',
+    date: 'Feb 8, 2024',
     description:
-      'Fix timestamp handling for authorization system to use server time',
+      'Enable authorization for multiple accounting points simultaneously',
     milestone: false,
-    reference: 'CSUSE0042963',
-    priority: '3',
+    reference: 'CSUSE0070176',
+    priority: '2',
+  },
+  {
+    id: 376,
+    title: 'Authorization Restoration Process',
+    status: 'in-progress',
+    date: 'Feb 22, 2024',
+    description:
+      'Restore authorizations when sales contracts are restored in DH-351 process',
+    milestone: false,
+    priority: '2',
+  },
+  {
+    id: 388,
+    title: 'Energy Community Calculation Precision',
+    status: 'completed',
+    date: 'Feb 29, 2024',
+    description:
+      'Clarification of calculation precision in energy community measurements',
+    milestone: false,
+    reference: 'CSUSE0068632',
+    priority: '1',
+  },
+  {
+    id: 390,
+    title: 'Time Series Data Control',
+    status: 'pending',
+    date: 'Feb 26, 2024',
+    description:
+      'Implementation of size limits for outbound time series messages including energy community calculations',
+    milestone: true,
+    reference: 'CSUSE0071213',
+    priority: '1',
   },
 ]
 
@@ -117,20 +139,20 @@ export default function TimelinePage() {
         <div>
           <h1 className="text-3xl font-bold">Development Timeline</h1>
           <p className="text-muted-foreground mt-2">
-            Authorization System Development Progress
+            System Development Progress
           </p>
         </div>
         <Card className="w-fit">
           <CardContent className="flex items-center gap-2 py-2">
             <CalendarDays className="text-muted-foreground h-4 w-4" />
-            <span className="text-sm">Last updated: November 9, 2024</span>
+            <span className="text-sm">Last updated: March 1, 2024</span>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Authorization System Improvements</CardTitle>
+          <CardTitle>Development Progress</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="relative ml-4">
