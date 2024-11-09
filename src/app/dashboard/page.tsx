@@ -71,6 +71,7 @@ const recentDevelopments: DevelopmentItem[] = [
     description:
       'Restore authorizations when sales contracts are restored in DH-351 process',
     priority: '2',
+    reference: 'CSUSE0070406',
   },
 ]
 
