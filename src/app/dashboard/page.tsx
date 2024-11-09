@@ -49,14 +49,16 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Priority Distribution
+              Most recently released feature
             </CardTitle>
             <Clock className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">P2</div>
+            <div className="text-2xl font-bold">
+              Authorization Timestamp Fix
+            </div>
             <div className="text-muted-foreground text-xs">
-              Majority priority level
+              Ref: CSUSE0042963
             </div>
           </CardContent>
         </Card>
