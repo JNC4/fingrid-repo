@@ -43,6 +43,7 @@ const timelineData: TimelineItem[] = [
     description:
       'Implement light customer-specific authorization to retrieve accounting points with minimum data',
     milestone: false,
+    reference: 'CSUSE0070711',
     priority: '2',
   },
   {
@@ -75,6 +76,7 @@ const timelineData: TimelineItem[] = [
     description:
       'Restore authorizations when sales contracts are restored in DH-351 process',
     milestone: false,
+    reference: 'CSUSE0070406',
     priority: '2',
   },
   {
