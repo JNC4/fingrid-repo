@@ -1,3 +1,5 @@
+'use client'
+
 import { Bell, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
