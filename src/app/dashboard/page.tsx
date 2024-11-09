@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -7,6 +9,8 @@ import {
   Bell,
   ChevronRight,
 } from 'lucide-react'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 export default function DashboardPage() {
   return (
@@ -16,7 +20,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground mt-2">
-            Welcome to your development overview.
+            Authorization System Development Overview
           </p>
         </div>
         <Button>
@@ -35,9 +39,9 @@ export default function DashboardPage() {
             <BarChart3 className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="text-2xl font-bold">5</div>
             <div className="text-muted-foreground text-xs">
-              4 in review, 8 in progress
+              2 in progress, 2 pending, 1 completed
             </div>
           </CardContent>
         </Card>
@@ -45,14 +49,14 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Time to Completion
+              Priority Distribution
             </CardTitle>
             <Clock className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8.2 days</div>
+            <div className="text-2xl font-bold">P2</div>
             <div className="text-muted-foreground text-xs">
-              Average completion time
+              Majority priority level
             </div>
           </CardContent>
         </Card>
@@ -60,14 +64,14 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Feature Requests
+              Development Requests
             </CardTitle>
             <GitPullRequestDraft className="text-muted-foreground h-4 w-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">25</div>
+            <div className="text-2xl font-bold">7</div>
             <div className="text-muted-foreground text-xs">
-              +2 since last week
+              3 marked as milestones
             </div>
           </CardContent>
         </Card>
@@ -78,9 +82,11 @@ export default function DashboardPage() {
         <Card className="col-span-2">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Timeline Preview</CardTitle>
-              <Button variant="ghost" size="sm">
-                View All <ChevronRight className="ml-1 h-4 w-4" />
+              <CardTitle>Recent Developments</CardTitle>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/timeline">
+                  View All <ChevronRight className="ml-1 h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </CardHeader>
@@ -88,19 +94,19 @@ export default function DashboardPage() {
             <div className="space-y-4">
               {[
                 {
-                  title: 'Authentication System',
+                  title: 'Authorization Service Integration',
                   status: 'In Progress',
-                  date: 'Expected: Dec 15',
+                  date: 'Priority 3 • Ref: CSUSE0007907',
                 },
                 {
-                  title: 'API Integration',
-                  status: 'In Review',
-                  date: 'Expected: Dec 20',
+                  title: 'Authorization Link System',
+                  status: 'Pending',
+                  date: 'Priority 2 • Ref: CSUSE0038787',
                 },
                 {
-                  title: 'Dashboard UI',
+                  title: 'Authorization Timestamp Fix',
                   status: 'Completed',
-                  date: 'Dec 5',
+                  date: 'Priority 3 • Ref: CSUSE0042963',
                 },
               ].map((item, index) => (
                 <div
@@ -109,11 +115,22 @@ export default function DashboardPage() {
                 >
                   <div>
                     <p className="font-medium">{item.title}</p>
-                    <p className="text-muted-foreground text-sm">
+                    <p
+                      className={cn(
+                        'text-sm',
+                        item.status === 'Completed'
+                          ? 'text-green-600'
+                          : item.status === 'In Progress'
+                            ? 'text-blue-600'
+                            : 'text-muted-foreground'
+                      )}
+                    >
                       {item.status}
                     </p>
                   </div>
-                  <p className="text-muted-foreground text-sm">{item.date}</p>
+                  <p className="text-muted-foreground text-right text-sm">
+                    {item.date}
+                  </p>
                 </div>
               ))}
             </div>
@@ -133,7 +150,7 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                   <Button variant="outline" className="w-full justify-start">
                     <Bell className="mr-2 h-4 w-4" />
-                    Feature Updates
+                    Authorization Updates
                   </Button>
                   <Button variant="outline" className="w-full justify-start">
                     <Clock className="mr-2 h-4 w-4" />

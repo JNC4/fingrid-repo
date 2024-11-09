@@ -12,7 +12,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-// Add TypeScript interfaces
 interface TimelineItem {
   id: number
   title: string
@@ -20,41 +19,63 @@ interface TimelineItem {
   date: string
   description: string
   milestone: boolean
+  reference?: string
+  priority?: '1' | '2' | '3'
 }
 
-// Mock data
 const timelineData: TimelineItem[] = [
   {
-    id: 1,
-    title: 'User Authentication System',
-    status: 'completed',
-    date: 'December 1, 2024',
-    description: 'Implement secure login and registration system',
-    milestone: true,
-  },
-  {
-    id: 2,
-    title: 'Database Integration',
+    id: 39,
+    title: 'Authorization Service Integration',
     status: 'in-progress',
-    date: 'December 15, 2024',
-    description: 'Set up and configure PostgreSQL database',
-    milestone: false,
+    date: 'Nov 3, 2021',
+    description:
+      'Enable authorization management through separate service for better integration with customer applications',
+    milestone: true,
+    reference: 'CSUSE0007907',
+    priority: '3',
   },
   {
-    id: 3,
-    title: 'API Development',
+    id: 80,
+    title: 'Customer Level Authorization',
     status: 'pending',
-    date: 'December 30, 2024',
-    description: 'Create RESTful API endpoints',
-    milestone: true,
+    date: 'June 9, 2022',
+    description:
+      'Implement light customer-specific authorization to retrieve accounting points with minimum data',
+    milestone: false,
+    priority: '2',
   },
   {
-    id: 4,
-    title: 'Frontend Implementation',
-    status: 'delayed',
-    date: 'January 15, 2025',
-    description: 'Develop user interface components',
+    id: 184,
+    title: 'Simplified Authorization Management',
+    status: 'in-progress',
+    date: 'Nov 30, 2022',
+    description:
+      'Improve process for ending authorizations through both interface and GUI',
+    milestone: false,
+    priority: '2',
+  },
+  {
+    id: 216,
+    title: 'Authorization Link System',
+    status: 'pending',
+    date: 'Jan 11, 2023',
+    description:
+      'Direct link implementation for household authorizations with pre-filled information',
     milestone: true,
+    reference: 'CSUSE0038787',
+    priority: '2',
+  },
+  {
+    id: 253,
+    title: 'Authorization Timestamp Fix',
+    status: 'completed',
+    date: 'Mar 1, 2023',
+    description:
+      'Fix timestamp handling for authorization system to use server time',
+    milestone: false,
+    reference: 'CSUSE0042963',
+    priority: '3',
   },
 ]
 
@@ -92,26 +113,24 @@ const statusConfig: StatusConfigType = {
 export default function TimelinePage() {
   return (
     <div className="flex flex-col gap-6 p-6">
-      {/* Header Section */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Development Timeline</h1>
           <p className="text-muted-foreground mt-2">
-            Track development progress and upcoming milestones
+            Authorization System Development Progress
           </p>
         </div>
         <Card className="w-fit">
           <CardContent className="flex items-center gap-2 py-2">
             <CalendarDays className="text-muted-foreground h-4 w-4" />
-            <span className="text-sm">Last updated: December 9, 2024</span>
+            <span className="text-sm">Last updated: November 9, 2024</span>
           </CardContent>
         </Card>
       </div>
 
-      {/* Timeline Section */}
       <Card>
         <CardHeader>
-          <CardTitle>Project Milestones</CardTitle>
+          <CardTitle>Authorization System Improvements</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="relative ml-4">
@@ -121,7 +140,6 @@ export default function TimelinePage() {
 
               return (
                 <div key={item.id} className="relative pb-10 last:pb-0">
-                  {/* Timeline line */}
                   {!isLast && (
                     <div
                       className={cn(
@@ -133,9 +151,7 @@ export default function TimelinePage() {
                     />
                   )}
 
-                  {/* Timeline item */}
                   <div className="flex gap-4">
-                    {/* Status indicator */}
                     <div
                       className={cn(
                         'relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-background',
@@ -145,7 +161,6 @@ export default function TimelinePage() {
                       <StatusIcon className="h-3 w-3 text-white" />
                     </div>
 
-                    {/* Content */}
                     <div className="bg-card flex flex-1 items-center justify-between rounded-lg border p-4">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
@@ -155,13 +170,25 @@ export default function TimelinePage() {
                               Milestone
                             </span>
                           )}
+                          {item.priority && (
+                            <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-600">
+                              Priority {item.priority}
+                            </span>
+                          )}
                         </div>
                         <p className="text-muted-foreground text-sm">
                           {item.description}
                         </p>
-                        <p className="text-muted-foreground text-xs">
-                          {item.date}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-muted-foreground text-xs">
+                            {item.date}
+                          </p>
+                          {item.reference && (
+                            <span className="text-muted-foreground text-xs">
+                              Ref: {item.reference}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <Button variant="ghost" size="icon">
                         <ChevronRight className="h-4 w-4" />
