@@ -34,7 +34,7 @@ export default function RootLayout({
           <TopNav />
           <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
-        <Script strategy="afterInteractive">
+        <Script id="chatling-config" strategy="afterInteractive">
           {`
             window.chtlConfig = {
               chatbotId: "3994814494"
