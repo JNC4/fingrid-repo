@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client'
 
 import { useState } from 'react'
@@ -33,16 +32,6 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import UpvoteButton from '@/components/ui/UpvoteButton'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 
 interface TimelineItem {
   id: number
@@ -69,6 +58,147 @@ interface FeatureRequest {
   status: 'new' | 'under-review' | 'planned' | 'rejected'
 }
 
+const timelineData: TimelineItem[] = [
+  {
+    id: 39,
+    title: 'Authorization Service Integration',
+    status: 'in-progress',
+    date: 'Nov 3, 2021',
+    description:
+      'Enable authorization management through separate service for better integration with customer applications',
+    milestone: true,
+    reference: 'CSUSE0007907',
+    priority: '3',
+    arguments:
+      'This is a prerequisite for utilizing Datahub possibilities in the consumer segment. Current authorization process needs improvement to be more efficient.',
+    impact:
+      'Authorization service would function similar to current authentication services or payment services, where users move from one website to another to complete necessary actions.',
+  },
+  {
+    id: 80,
+    title: 'Customer Level Authorization',
+    status: 'pending',
+    date: 'June 9, 2022',
+    description:
+      'Implement light customer-specific authorization to retrieve accounting points with minimum data',
+    milestone: false,
+    reference: 'CSUSE0070711',
+    priority: '2',
+    arguments:
+      'Customer might have many accounting points (e.g. 100) and the amount may vary. Third parties lack visibility to notice missing accounting points, leading to incomplete service coverage.',
+    impact:
+      'Simplifies authorization process for large customers with multiple accounting points, reducing workload for all parties.',
+    recommendation:
+      'Proposal supported to proceed. Particularly important for large customers where managing multiple accounting point authorizations is challenging and time-consuming.',
+  },
+  {
+    id: 377,
+    title: 'Third Party Authorization in Customer Portal',
+    status: 'in-progress',
+    date: 'Jan 24, 2024',
+    description:
+      'Streamline the authorization process for third-party applications through customer portal',
+    milestone: true,
+    reference: 'CSUSE0069362',
+    priority: '2',
+    arguments:
+      'Current process requires customers to log into multiple systems to complete authorization process.',
+    impact:
+      'Improves customer experience by allowing all steps to be completed in one system.',
+  },
+  {
+    id: 381,
+    title: 'Bulk Authorization Management',
+    status: 'pending',
+    date: 'Feb 8, 2024',
+    description:
+      'Enable authorization for multiple accounting points simultaneously',
+    milestone: false,
+    reference: 'CSUSE0070176',
+    priority: '2',
+    arguments:
+      'Currently authorizations must be done one accounting point at a time, making the process time-consuming for customers with multiple points.',
+    impact:
+      'Significantly reduces time and effort required for managing multiple authorizations.',
+  },
+  {
+    id: 376,
+    title: 'Authorization Restoration Process',
+    status: 'in-progress',
+    date: 'Feb 22, 2024',
+    description:
+      'Restore authorizations when sales contracts are restored in DH-351 process',
+    milestone: false,
+    reference: 'CSUSE0070406',
+    priority: '2',
+    arguments:
+      'Issue discovered as part of processing flexibility service provider authorizations.',
+    impact:
+      'Ensures continuous service delivery and proper authorization management during contract restorations.',
+  },
+  {
+    id: 388,
+    title: 'Energy Community Calculation Precision',
+    status: 'completed',
+    date: 'Feb 29, 2024',
+    description:
+      'Clarification of calculation precision in energy community measurements',
+    milestone: false,
+    reference: 'CSUSE0068632',
+    priority: '1',
+    arguments:
+      'Need for precise energy community measurements to ensure accurate calculations.',
+    impact:
+      'Improves accuracy of energy community calculations and ensures consistent measurement standards.',
+  },
+  {
+    id: 390,
+    title: 'Time Series Data Control',
+    status: 'pending',
+    date: 'Feb 26, 2024',
+    description:
+      'Implementation of size limits for outbound time series messages including energy community calculations',
+    milestone: true,
+    reference: 'CSUSE0071213',
+    priority: '1',
+    arguments:
+      'Current system lacks controls on time series message sizes, potentially affecting system performance.',
+    impact:
+      'Optimizes system performance and ensures efficient handling of time series data, particularly for energy community calculations.',
+  },
+  {
+    id: 336,
+    title: 'Consumer Authorization Termination Rights',
+    status: 'pending',
+    date: 'Nov 6, 2023',
+    description:
+      'Enable third parties to terminate consumer customer authorizations similar to business customer authorizations',
+    milestone: false,
+    reference: 'CSUSE0070406',
+    priority: '2',
+    arguments:
+      'Current process does not align with EU reference model for access to meter and consumption data (05/01/2025). Third parties cannot terminate consumer authorizations.',
+    impact:
+      'Brings system in compliance with EU regulations and improves authorization management capabilities.',
+  },
+  {
+    id: 365,
+    title: 'Customer Portal Enhancement for Energy Reporting',
+    status: 'pending',
+    date: 'Jan 12, 2024',
+    description:
+      'Improve customer portal interface for adding energy reporting authorizations (AP01)',
+    milestone: false,
+    reference: 'CSUSE0068715',
+    priority: '2',
+    arguments:
+      'Current interface allows selection of any company regardless of role, leading to incorrect authorization attempts.',
+    impact:
+      'Reduces incorrect authorization attempts and customer service inquiries by showing only valid authorization options.',
+  },
+]
+
+// Placeholder feature requests data
 const featureRequestsData: FeatureRequest[] = [
   {
     id: 1,
@@ -91,18 +221,7 @@ const featureRequestsData: FeatureRequest[] = [
     upvotes: 8,
     status: 'new',
   },
-]
-
-const categories = [
-  'Data Management',
-  'User Interface',
-  'Documentation',
-  'API Integration',
-  'Performance',
-  'Security',
-  'Analytics',
-  'Automation',
-  'Other',
+  // Add more feature requests as needed
 ]
 
 type SortField = 'date' | 'priority' | 'upvotes' | 'status'
@@ -121,14 +240,6 @@ export default function FeaturesPage() {
   const [sortAscending, setSortAscending] = useState(false)
   const [activeTab, setActiveTab] = useState('in-development')
   const [featureRequests, setFeatureRequests] = useState(featureRequestsData)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-  // Form state
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [category, setCategory] = useState('')
-  const [submittedBy, setSubmittedBy] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleUpvote = (id: number, isUpvoted: boolean) => {
     setFeatureRequests((prevRequests) =>
@@ -138,54 +249,6 @@ export default function FeaturesPage() {
           : request
       )
     )
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    try {
-      const newFeature: FeatureRequest = {
-        id: featureRequests.length + 1,
-        title,
-        description,
-        category,
-        submittedBy,
-        submittedDate: new Date().toISOString().split('T')[0],
-        upvotes: 0,
-        status: 'new',
-      }
-
-      setFeatureRequests((prev) => [...prev, newFeature])
-      setIsDialogOpen(false)
-
-      // Reset form
-      setTitle('')
-      setDescription('')
-      setCategory('')
-      setSubmittedBy('')
-    } catch (error) {
-      console.error('Error submitting feature request:', error)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />
-      case 'in-progress':
-        return <GitPullRequest className="h-4 w-4 text-blue-500" />
-      case 'pending':
-        return <Clock className="h-4 w-4 text-orange-500" />
-      case 'new':
-        return <GitPullRequestDraft className="h-4 w-4 text-purple-500" />
-      case 'under-review':
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />
-      default:
-        return <GitPullRequestDraft className="h-4 w-4 text-gray-500" />
-    }
   }
 
   const getStatusColor = (status: string) => {
@@ -206,6 +269,23 @@ export default function FeaturesPage() {
         return 'text-red-600 bg-red-50'
       default:
         return 'text-gray-600 bg-gray-50'
+    }
+  }
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return <CheckCircle2 className="h-4 w-4 text-green-500" />
+      case 'in-progress':
+        return <GitPullRequest className="h-4 w-4 text-blue-500" />
+      case 'pending':
+        return <Clock className="h-4 w-4 text-orange-500" />
+      case 'new':
+        return <GitPullRequestDraft className="h-4 w-4 text-purple-500" />
+      case 'under-review':
+        return <AlertCircle className="h-4 w-4 text-yellow-500" />
+      default:
+        return <GitPullRequestDraft className="h-4 w-4 text-gray-500" />
     }
   }
 
@@ -231,9 +311,7 @@ export default function FeaturesPage() {
         <TabsContent value="requests" className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Button variant="default" onClick={() => setIsDialogOpen(true)}>
-                Submit New Feature Request
-              </Button>
+              <Button variant="default">Submit New Feature Request</Button>
             </div>
             <div className="flex items-center gap-2">
               <DropdownMenu>
@@ -321,17 +399,18 @@ export default function FeaturesPage() {
               <p className="mt-2 text-sm text-muted-foreground">
                 Be the first to submit a feature request!
               </p>
-              <Button
-                variant="default"
-                className="mt-4"
-                onClick={() => setIsDialogOpen(true)}
-              >
+              <Button variant="default" className="mt-4">
                 Submit New Feature Request
               </Button>
             </div>
           )}
 
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="fixed bottom-6 right-6" size="lg">
+                Submit New Feature Request
+              </Button>
+            </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
               <DialogHeader>
                 <DialogTitle>Submit Feature Request</DialogTitle>
@@ -339,82 +418,16 @@ export default function FeaturesPage() {
                   Propose a new feature or enhancement for the system.
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Enter feature title"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Describe the feature and its benefits..."
-                    className="min-h-[100px]"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
-                  <Select
-                    id="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    required
-                  >
-                    <option value="">Select a category</option>
-                    {categories.map((cat) => (
-                      <option key={cat} value={cat.toLowerCase()}>
-                        {cat}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="submittedBy">Organization / Team</Label>
-                  <Input
-                    id="submittedBy"
-                    value={submittedBy}
-                    onChange={(e) => setSubmittedBy(e.target.value)}
-                    placeholder="Enter your organization or team name"
-                    required
-                  />
-                </div>
-
-                <div className="flex justify-end gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsDialogOpen(false)}
-                    disabled={isSubmitting}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Submitting...' : 'Submit Request'}
-                  </Button>
-                </div>
-              </form>
+              {/* Feature request form will go here */}
+              <div className="grid gap-4 py-4">
+                <p className="text-sm text-muted-foreground">
+                  Feature request form coming soon...
+                </p>
+              </div>
             </DialogContent>
           </Dialog>
         </TabsContent>
       </Tabs>
-=======
-export default function FeaturesPage() {
-  return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold">Feature Requests</h1>
->>>>>>> parent of 627d06b (complete example addition of features page)
     </div>
   )
 }
