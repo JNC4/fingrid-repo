@@ -32,6 +32,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import UpvoteButton from '@/components/ui/UpvoteButton'
+import { FeatureRequestForm } from './components/forms/FeatureRequestForm'
 
 interface TimelineItem {
   id: number
@@ -234,22 +235,41 @@ type FilterStatus =
   | 'planned'
   | 'rejected'
 
-export default function FeaturesPage() {
-  const [selectedStatuses, setSelectedStatuses] = useState<FilterStatus[]>([])
-  const [sortField, setSortField] = useState<SortField>('date')
-  const [sortAscending, setSortAscending] = useState(false)
-  const [activeTab, setActiveTab] = useState('in-development')
-  const [featureRequests, setFeatureRequests] = useState(featureRequestsData)
-
-  const handleUpvote = (id: number, isUpvoted: boolean) => {
-    setFeatureRequests((prevRequests) =>
-      prevRequests.map((request) =>
-        request.id === id
-          ? { ...request, upvotes: request.upvotes + (isUpvoted ? 1 : -1) }
-          : request
+  export default function FeaturesPage() {
+    const [selectedStatuses, setSelectedStatuses] = useState<FilterStatus[]>([])
+    const [sortField, setSortField] = useState<SortField>('date')
+    const [sortAscending, setSortAscending] = useState(false)
+    const [activeTab, setActiveTab] = useState('in-development')
+    const [featureRequests, setFeatureRequests] = useState(featureRequestsData)
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+  
+    const handleUpvote = (id: number, isUpvoted: boolean) => {
+      setFeatureRequests((prevRequests) =>
+        prevRequests.map((request) =>
+          request.id === id
+            ? { ...request, upvotes: request.upvotes + (isUpvoted ? 1 : -1) }
+            : request
+        )
       )
-    )
-  }
+    }
+    const handleSubmit = async (data: {
+      title: string
+      description: string
+      category: string
+      submittedBy: string
+    }) => {
+      const newFeature: FeatureRequest = {
+        id: featureRequests.length + 1,
+        ...data,
+        submittedDate: new Date().toISOString().split('T')[0],
+        status: 'new',
+        upvotes: 0,
+      }
+  
+      setFeatureRequests((prev) => [...prev, newFeature])
+      setIsDialogOpen(false)
+    }
+  
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -311,7 +331,9 @@ export default function FeaturesPage() {
         <TabsContent value="requests" className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Button variant="default">Submit New Feature Request</Button>
+              <Button variant="default" onClick={() => setIsDialogOpen(true)}>
+                Submit New Feature Request
+              </Button>
             </div>
             <div className="flex items-center gap-2">
               <DropdownMenu>
@@ -399,18 +421,17 @@ export default function FeaturesPage() {
               <p className="mt-2 text-sm text-muted-foreground">
                 Be the first to submit a feature request!
               </p>
-              <Button variant="default" className="mt-4">
+              <Button
+                variant="default"
+                className="mt-4"
+                onClick={() => setIsDialogOpen(true)}
+              >
                 Submit New Feature Request
               </Button>
             </div>
           )}
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="fixed bottom-6 right-6" size="lg">
-                Submit New Feature Request
-              </Button>
-            </DialogTrigger>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="sm:max-w-[600px]">
               <DialogHeader>
                 <DialogTitle>Submit Feature Request</DialogTitle>
@@ -418,12 +439,10 @@ export default function FeaturesPage() {
                   Propose a new feature or enhancement for the system.
                 </DialogDescription>
               </DialogHeader>
-              {/* Feature request form will go here */}
-              <div className="grid gap-4 py-4">
-                <p className="text-sm text-muted-foreground">
-                  Feature request form coming soon...
-                </p>
-              </div>
+              <FeatureRequestForm
+                onSubmit={handleSubmit}
+                onCancel={() => setIsDialogOpen(false)}
+              />
             </DialogContent>
           </Dialog>
         </TabsContent>
