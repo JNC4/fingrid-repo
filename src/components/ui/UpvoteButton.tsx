@@ -1,47 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { ArrowUpCircle } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface UpvoteButtonProps {
-  initialCount?: number;
-  onUpvote?: (isUpvoted: boolean) => void;
+  initialCount?: number
+  onUpvote?: (isUpvoted: boolean) => void
+  size?: 'default' | 'sm' | 'lg'
+  className?: string
+  disabled?: boolean
 }
 
-const UpvoteButton: React.FC<UpvoteButtonProps> = ({ 
+const UpvoteButton = ({
   initialCount = 0,
   onUpvote = () => {},
-}) => {
-  const [upvoted, setUpvoted] = useState(false);
-  const [count, setCount] = useState(initialCount);
+  size = 'default',
+  className,
+  disabled = false,
+}: UpvoteButtonProps) => {
+  const [upvoted, setUpvoted] = useState(false)
+  const [count, setCount] = useState(initialCount)
 
   const handleUpvote = () => {
+    if (disabled) return
+
     if (!upvoted) {
-      setCount(prev => prev + 1);
-      setUpvoted(true);
-      onUpvote(true);
+      setCount((prev) => prev + 1)
+      setUpvoted(true)
+      onUpvote(true)
     } else {
-      setCount(prev => prev - 1);
-      setUpvoted(false);
-      onUpvote(false);
+      setCount((prev) => prev - 1)
+      setUpvoted(false)
+      onUpvote(false)
     }
-  };
+  }
 
   return (
-    <button
+    <Button
+      variant="ghost"
+      size={size}
       onClick={handleUpvote}
-      className={`flex flex-col items-center justify-center p-2 rounded-md border ${
-        upvoted ? 'bg-blue-50 border-blue-200' : 'bg-white border-gray-200'
-      }`}
+      disabled={disabled}
+      className={cn(
+        'gap-1.5 transition-colors',
+        upvoted && 'text-blue-600 hover:bg-blue-50 hover:text-blue-600',
+        disabled && 'cursor-not-allowed opacity-50',
+        className
+      )}
     >
-      {/* Simple triangle arrow using Unicode */}
-      <span className={`text-lg ${upvoted ? 'text-blue-500' : 'text-gray-500'}`}>
-        ▲
-      </span>
-      <span className={`text-xs font-medium ${
-        upvoted ? 'text-blue-500' : 'text-gray-500'
-      }`}>
-        {count}
-      </span>
-    </button>
-  );
-};
+      <ArrowUpCircle
+        className={cn(
+          'h-4 w-4 transition-transform',
+          upvoted && 'fill-current'
+        )}
+      />
+      {count}
+    </Button>
+  )
+}
 
-export default UpvoteButton;
+export default UpvoteButton

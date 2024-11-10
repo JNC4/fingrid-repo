@@ -23,15 +23,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Filter,
   SortAsc,
-  ChevronRight,
-  ArrowUpCircle,
-  GitPullRequest,
   GitPullRequestDraft,
+  CheckCircle2,
   Clock,
   AlertCircle,
-  CheckCircle2,
+  Circle,
+  GitPullRequest,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import UpvoteButton from '@/components/ui/UpvoteButton'
 
 interface TimelineItem {
   id: number
@@ -239,22 +239,16 @@ export default function FeaturesPage() {
   const [sortField, setSortField] = useState<SortField>('date')
   const [sortAscending, setSortAscending] = useState(false)
   const [activeTab, setActiveTab] = useState('in-development')
+  const [featureRequests, setFeatureRequests] = useState(featureRequestsData)
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />
-      case 'in-progress':
-        return <GitPullRequest className="h-4 w-4 text-blue-500" />
-      case 'pending':
-        return <Clock className="h-4 w-4 text-orange-500" />
-      case 'new':
-        return <GitPullRequestDraft className="h-4 w-4 text-purple-500" />
-      case 'under-review':
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />
-      default:
-        return <GitPullRequestDraft className="h-4 w-4 text-gray-500" />
-    }
+  const handleUpvote = (id: number, isUpvoted: boolean) => {
+    setFeatureRequests((prevRequests) =>
+      prevRequests.map((request) =>
+        request.id === id
+          ? { ...request, upvotes: request.upvotes + (isUpvoted ? 1 : -1) }
+          : request
+      )
+    )
   }
 
   const getStatusColor = (status: string) => {
@@ -278,6 +272,23 @@ export default function FeaturesPage() {
     }
   }
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return <CheckCircle2 className="h-4 w-4 text-green-500" />
+      case 'in-progress':
+        return <GitPullRequest className="h-4 w-4 text-blue-500" />
+      case 'pending':
+        return <Clock className="h-4 w-4 text-orange-500" />
+      case 'new':
+        return <GitPullRequestDraft className="h-4 w-4 text-purple-500" />
+      case 'under-review':
+        return <AlertCircle className="h-4 w-4 text-yellow-500" />
+      default:
+        return <GitPullRequestDraft className="h-4 w-4 text-gray-500" />
+    }
+  }
+
   return (
     <div className="p-6">
       <div className="mb-6">
@@ -296,184 +307,6 @@ export default function FeaturesPage() {
           <TabsTrigger value="in-development">In Development</TabsTrigger>
           <TabsTrigger value="requests">Feature Requests</TabsTrigger>
         </TabsList>
-
-        <TabsContent value="in-development" className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <Filter className="mr-2 h-4 w-4" />
-                    Filter
-                    {selectedStatuses.length > 0 && (
-                      <span className="ml-1 rounded-full bg-primary px-2 py-0.5 text-xs text-white">
-                        {selectedStatuses.length}
-                      </span>
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {(
-                    ['completed', 'in-progress', 'pending'] as FilterStatus[]
-                  ).map((status) => (
-                    <DropdownMenuItem
-                      key={status}
-                      onClick={() => {
-                        setSelectedStatuses((prev) =>
-                          prev.includes(status)
-                            ? prev.filter((s) => s !== status)
-                            : [...prev, status]
-                        )
-                      }}
-                    >
-                      <div className="flex items-center">
-                        {selectedStatuses.includes(status) && (
-                          <span className="mr-2">✓</span>
-                        )}
-                        {status.charAt(0).toUpperCase() +
-                          status.slice(1).replace('-', ' ')}
-                      </div>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <SortAsc className="mr-2 h-4 w-4" />
-                    Sort
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setSortField('date')
-                      setSortAscending(!sortAscending)
-                    }}
-                  >
-                    Date {sortField === 'date' && (sortAscending ? '↑' : '↓')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setSortField('priority')
-                      setSortAscending(!sortAscending)
-                    }}
-                  >
-                    Priority{' '}
-                    {sortField === 'priority' && (sortAscending ? '↑' : '↓')}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {timelineData.map((item) => (
-              <Dialog key={item.id}>
-                <DialogTrigger asChild>
-                  <Card className="cursor-pointer transition-colors hover:bg-accent/5">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
-                        {item.title}
-                      </CardTitle>
-                      {getStatusIcon(item.status)}
-                    </CardHeader>
-                    <CardContent>
-                      <p className="line-clamp-2 text-sm text-muted-foreground">
-                        {item.description}
-                      </p>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        <span
-                          className={cn(
-                            'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium',
-                            getStatusColor(item.status)
-                          )}
-                        >
-                          {item.status.charAt(0).toUpperCase() +
-                            item.status.slice(1).replace('-', ' ')}
-                        </span>
-                        {item.milestone && (
-                          <span className="inline-flex items-center rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-600">
-                            Milestone
-                          </span>
-                        )}
-                        {item.priority && (
-                          <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-600">
-                            Priority {item.priority}
-                          </span>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[600px]">
-                  <DialogHeader>
-                    <DialogTitle>{item.title}</DialogTitle>
-                    <DialogDescription>
-                      <div className="mt-4 space-y-4">
-                        <div>
-                          <h4 className="font-medium">Status</h4>
-                          <p className="text-sm text-gray-600">
-                            {item.status.charAt(0).toUpperCase() +
-                              item.status.slice(1).replace('-', ' ')}
-                          </p>
-                        </div>
-
-                        <div>
-                          <h4 className="font-medium">Description</h4>
-                          <p className="text-sm text-gray-600">
-                            {item.description}
-                          </p>
-                        </div>
-
-                        {item.arguments && (
-                          <div>
-                            <h4 className="font-medium">Reasoning</h4>
-                            <p className="text-sm text-gray-600">
-                              {item.arguments}
-                            </p>
-                          </div>
-                        )}
-
-                        {item.impact && (
-                          <div>
-                            <h4 className="font-medium">Impact</h4>
-                            <p className="text-sm text-gray-600">
-                              {item.impact}
-                            </p>
-                          </div>
-                        )}
-
-                        <div className="flex flex-wrap gap-2">
-                          {item.milestone && (
-                            <span className="rounded-full bg-orange-50 px-2 py-1 text-xs font-medium text-orange-600">
-                              Milestone
-                            </span>
-                          )}
-                          {item.priority && (
-                            <span className="rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-600">
-                              Priority {item.priority}
-                            </span>
-                          )}
-                          {item.reference && (
-                            <span className="rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600">
-                              Ref: {item.reference}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-            ))}
-          </div>
-        </TabsContent>
 
         <TabsContent value="requests" className="space-y-4">
           <div className="flex items-center justify-between">
@@ -514,7 +347,7 @@ export default function FeaturesPage() {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {featureRequestsData.map((request) => (
+            {featureRequests.map((request) => (
               <Card
                 key={request.id}
                 className="cursor-pointer transition-colors hover:bg-accent/5"
@@ -523,10 +356,13 @@ export default function FeaturesPage() {
                   <CardTitle className="text-sm font-medium">
                     {request.title}
                   </CardTitle>
-                  <Button variant="ghost" size="sm" className="gap-1">
-                    <ArrowUpCircle className="h-4 w-4" />
-                    {request.upvotes}
-                  </Button>
+                  <UpvoteButton
+                    initialCount={request.upvotes}
+                    size="sm"
+                    onUpvote={(isUpvoted) =>
+                      handleUpvote(request.id, isUpvoted)
+                    }
+                  />
                 </CardHeader>
                 <CardContent>
                   <p className="line-clamp-2 text-sm text-muted-foreground">
@@ -556,7 +392,7 @@ export default function FeaturesPage() {
             ))}
           </div>
 
-          {featureRequestsData.length === 0 && (
+          {featureRequests.length === 0 && (
             <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
               <GitPullRequestDraft className="mb-4 h-12 w-12 text-muted-foreground" />
               <h3 className="text-lg font-medium">No feature requests yet</h3>
