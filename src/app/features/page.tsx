@@ -328,6 +328,152 @@ type FilterStatus =
           <TabsTrigger value="requests">Feature Requests</TabsTrigger>
         </TabsList>
 
+        <TabsContent value="in-development" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Filter className="mr-2 h-4 w-4" />
+                    Filter
+                    {selectedStatuses.length > 0 && (
+                      <span className="bg-primary ml-1 rounded-full px-2 py-0.5 text-xs text-white">
+                        {selectedStatuses.length}
+                      </span>
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {(['completed', 'in-progress', 'pending'] as const).map(
+                    (status) => (
+                      <DropdownMenuItem
+                        key={status}
+                        onClick={() => {
+                          setSelectedStatuses((prev) =>
+                            prev.includes(status)
+                              ? prev.filter((s) => s !== status)
+                              : [...prev, status]
+                          )
+                        }}
+                      >
+                        <div className="flex items-center">
+                          {selectedStatuses.includes(status) && (
+                            <span className="mr-2">✓</span>
+                          )}
+                          {status.charAt(0).toUpperCase() +
+                            status.slice(1).replace('-', ' ')}
+                        </div>
+                      </DropdownMenuItem>
+                    )
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <SortAsc className="mr-2 h-4 w-4" />
+                    Sort
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setSortField('date')
+                      setSortAscending(!sortAscending)
+                    }}
+                  >
+                    Date {sortField === 'date' && (sortAscending ? '↑' : '↓')}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      setSortField('priority')
+                      setSortAscending(!sortAscending)
+                    }}
+                  >
+                    Priority
+                    {sortField === 'priority' && (sortAscending ? '↑' : '↓')}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {timelineData
+              .filter(
+                (item) =>
+                  selectedStatuses.length === 0 ||
+                  selectedStatuses.includes(item.status)
+              )
+              .sort((a, b) => {
+                if (sortField === 'date') {
+                  return sortAscending
+                    ? new Date(a.date).getTime() - new Date(b.date).getTime()
+                    : new Date(b.date).getTime() - new Date(a.date).getTime()
+                }
+                if (sortField === 'priority') {
+                  const priorityA = a.priority || '3'
+                  const priorityB = b.priority || '3'
+                  return sortAscending
+                    ? priorityA.localeCompare(priorityB)
+                    : priorityB.localeCompare(priorityA)
+                }
+                return 0
+              })
+              .map((item) => (
+                <Card
+                  key={item.id}
+                  className="cursor-pointer transition-colors hover:bg-accent/5"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      {item.title}
+                    </CardTitle>
+                    <div className="flex items-center gap-2">
+                      {item.milestone && (
+                        <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-600">
+                          Milestone
+                        </span>
+                      )}
+                      {getStatusIcon(item.status)}
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="line-clamp-2 text-sm text-muted-foreground">
+                      {item.description}
+                    </p>
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap gap-2">
+                        <span
+                          className={cn(
+                            'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium',
+                            getStatusColor(item.status)
+                          )}
+                        >
+                          {item.status.charAt(0).toUpperCase() +
+                            item.status.slice(1).replace('-', ' ')}
+                        </span>
+                        {item.priority && (
+                          <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-600">
+                            Priority {item.priority}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground">
+                        {item.date}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+          </div>
+        </TabsContent> 
+
         <TabsContent value="requests" className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
