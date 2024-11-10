@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import './globals.css'
 import { Sidebar } from '@/components/layouts/sidebar'
 import { TopNav } from '@/components/layouts/top-nav'
+import Script from 'next/script'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -33,6 +34,20 @@ export default function RootLayout({
           <TopNav />
           <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
+        <Script strategy="afterInteractive">
+          {`
+            window.chtlConfig = {
+              chatbotId: "3994814494"
+            }
+          `}
+        </Script>
+        <Script
+          async
+          data-id="3994814494"
+          id="chatling-embed-script"
+          src="https://chatling.ai/js/embed.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
