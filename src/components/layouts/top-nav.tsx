@@ -16,11 +16,18 @@ import { useNotifications } from '@/components/notifications/notification-provid
 export function TopNav() {
   const { addNotification } = useNotifications()
 
-  const showTestNotification = () => {
+  const showNotification = (type: 'info' | 'success' | 'warning' | 'error') => {
+    const messages = {
+      info: 'This is an informational message',
+      success: 'Operation completed successfully',
+      warning: 'Please review this warning',
+      error: 'An error has occurred',
+    }
+
     addNotification({
-      title: 'New Notification',
-      message: 'This is a test notification.',
-      status: 'info',
+      title: type.charAt(0).toUpperCase() + type.slice(1),
+      message: messages[type],
+      status: type,
       duration: 5000,
     })
   }
@@ -30,9 +37,28 @@ export function TopNav() {
       <div className="flex items-center space-x-2">
         <ThemeToggle />
         
-        <Button variant="ghost" size="icon" onClick={showTestNotification}>
-          <Bell className="h-5 w-5" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <Bell className="h-5 w-5" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => showNotification('info')}>
+              Show Info
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => showNotification('success')}>
+              Show Success
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => showNotification('warning')}>
+              Show Warning
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => showNotification('error')}>
+              Show Error
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

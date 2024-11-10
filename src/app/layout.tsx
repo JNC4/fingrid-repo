@@ -4,7 +4,7 @@ import './globals.css'
 import { Sidebar } from '@/components/layouts/sidebar'
 import { TopNav } from '@/components/layouts/top-nav'
 import Script from 'next/script'
-import { ThemeProvider } from '@/components/theme-provider'
+import { Providers } from '@/components/providers'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -30,27 +30,27 @@ export default function RootLayout({
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
       <body className="flex h-screen overflow-hidden bg-background">
-        <ThemeProvider defaultTheme="system" enableSystem>
+        <Providers>
           <Sidebar />
           <div className="flex flex-1 flex-col">
             <TopNav />
             <main className="flex-1 overflow-y-auto">{children}</main>
           </div>
-          <Script id="chatling-config" strategy="afterInteractive">
-            {`
-              window.chtlConfig = {
-                chatbotId: "3994814494"
-              }
-            `}
-          </Script>
-          <Script
-            async
-            data-id="3994814494"
-            id="chatling-embed-script"
-            src="https://chatling.ai/js/embed.js"
-            strategy="afterInteractive"
-          />
-        </ThemeProvider>
+        </Providers>
+        <Script id="chatling-config" strategy="afterInteractive">
+          {`
+            window.chtlConfig = {
+              chatbotId: "3994814494"
+            }
+          `}
+        </Script>
+        <Script
+          async
+          data-id="3994814494"
+          id="chatling-embed-script"
+          src="https://chatling.ai/js/embed.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
