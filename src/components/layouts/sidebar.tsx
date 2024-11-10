@@ -28,10 +28,10 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="bg-card flex h-screen w-64 flex-col border-r">
+    <div className="flex h-screen w-64 flex-col border-r bg-card">
       <div className="flex h-14 items-center border-b px-4">
         <Link href="/dashboard" className="flex items-center space-x-2">
-          <span className="text-lg font-bold">Fingrid</span>
+          <span className="text-lg font-bold">Fingrid Datahub</span>
         </Link>
       </div>
       <nav className="flex-1 space-y-1 p-4">

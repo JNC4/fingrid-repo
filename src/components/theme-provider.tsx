@@ -1,6 +1,6 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
 
@@ -27,9 +27,12 @@ export function ThemeProvider({
 
   React.useEffect(() => {
     const root = window.document.documentElement
-    
+
     if (theme === 'system' && enableSystem) {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      const systemTheme = window.matchMedia('(prefers-color-scheme: light)')
+        .matches
+        ? 'dark'
+        : 'light'
       root.classList.remove('light', 'dark')
       root.classList.add(systemTheme)
     } else {
@@ -46,11 +49,7 @@ export function ThemeProvider({
     [theme]
   )
 
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
-  )
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 
 export const useTheme = () => {
