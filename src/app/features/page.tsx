@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use client'
 
 import { useState } from 'react'
@@ -408,6 +409,12 @@ export default function FeaturesPage() {
           </Dialog>
         </TabsContent>
       </Tabs>
+=======
+export default function FeaturesPage() {
+  return (
+    <div className="p-6">
+      <h1 className="text-3xl font-bold">Feature Requests</h1>
+>>>>>>> parent of 627d06b (complete example addition of features page)
     </div>
   )
 }
